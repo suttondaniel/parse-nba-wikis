@@ -71,4 +71,4 @@ subtracts each player's DoB from right now which creates a timedelta object, the
 '''
 nba_df['current_age'] = nba_df.dob.apply(lambda x: (dt.datetime.now() - x).days / 365.25)
 
-nba_df.to_csv('nba_df.csv')
+nba_df.to_csv('nba_df2.csv')
