@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 import unicodedata
 from urllib.request import urlopen
 
+
 '''
 Get NBA team names and put them in a list format
 '''
