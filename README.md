@@ -94,10 +94,10 @@ nba_df.groupby('team')['current_age'].mean().sort_values(ascending=True).head()
 And the 
 
 ### REPLACE THIS WITH THE ROUNDED STUFF: 
-| team                  |      dob_ns |
-|:----------------------|------------:|
-| Oklahoma City Thunder | 9.23845e+17 |
-| San Antonio Spurs     | 9.10374e+17 |
-| Orlando Magic         | 9.06307e+17 |
-| Indiana Pacers        | 8.98105e+17 |
-| Houston Rockets       | 8.91841e+17 |
+| team                  |   current_age |
+|:----------------------|--------------:|
+| Oklahoma City Thunder |         23.39 |
+| San Antonio Spurs     |         23.81 |
+| Orlando Magic         |         23.94 |
+| Indiana Pacers        |         24.2  |
+| Houston Rockets       |         24.4  |
