@@ -68,8 +68,8 @@ for team in clean_teams:
     roster_rows = roster_table.find_all('tr')[1:]
     for tr in roster_rows:
         td = tr.find_all('td')
-        row = [unicodedata.normalize('NFKD', i.text.strip()) for i in td]   # gets rid of the weird \x0 spaces
-        row.append(team.replace('_', ' '))          # add column for team.  may just want to use 2nd index later 
+        row = [unicodedata.normalize('NFKD', i.text.strip()) for i in td]   
+        row.append(team.replace('_', ' '))           
         nba_players.append(row)
 ~~~
 
@@ -80,7 +80,7 @@ Now that we have a full list of players on current NBA rosters, we can create ou
 ~~~python
 headers = ['position', 'number', 'name', 'height', 'weight', 'dob', 'college', 'team']
 nba_df = pd.DataFrame(data=nba_players, columns=headers)
-nba_df.dob = nba_df.dob.str.replace('–', '-')       # need to find a way around those long hyphens besides manually
+nba_df.dob = nba_df.dob.str.replace('–', '-')       
 nba_df.dob = pd.to_datetime(nba_df.dob)
 ~~~
 
@@ -91,9 +91,10 @@ nba_df['current_age'] = nba_df.dob.apply(lambda x: round((dt.datetime.now() - x)
 nba_df.groupby('team')['current_age'].mean().sort_values(ascending=True).head()
 ~~~
 
-And the 
+Grouping our dataframe by team and sorting by the average age, we see that the Oklahoma City Thunder have the youngest team as the rosters stand today. 
 
-### REPLACE THIS WITH THE ROUNDED STUFF: 
+### Youngest teams in the NBA: 
+
 | team                  |   current_age |
 |:----------------------|--------------:|
 | Oklahoma City Thunder |         23.39 |
@@ -101,3 +102,96 @@ And the
 | Orlando Magic         |         23.94 |
 | Indiana Pacers        |         24.2  |
 | Houston Rockets       |         24.4  |
+
+We can now easily find out the oldest teams as well.  While we're at it, let us add some columns for height and weight in a more calculable format, that way we can figure out the tallest and heaviest teams: 
+
+~~~python
+    nba_df['height_in'] = nba_df['height'].apply(lambda x: x.split('(')[0])
+    nba_df['height_in'] = nba_df['height'].apply(lambda x: (int(x.split(' ')[0]) * 12) + (int(x.split(' ')[2])))
+    nba_df['weight_int'] = nba_df['weight'].apply(lambda x: int(x.split(' ')[0]))
+    nba_df['bmi'] = (703 * nba_df.weight_int) / (nba_df.height_in**2)
+~~~
+
+
+### Oldest teams in the NBA: 
+~~~python
+nba_df.groupby('team')['current_age'].mean().sort_values(ascending=False).head()
+~~~
+| team                 |   current_age |
+|:---------------------|--------------:|
+| Milwaukee Bucks      |         29.25 |
+| Phoenix Suns         |         27.93 |
+| Miami Heat           |         27.92 |
+| Los Angeles Clippers |         27.86 |
+| Dallas Mavericks     |         27.54 |
+
+
+### Lightest teams in the NBA: 
+~~~python
+nba_df.groupby('team')['weight_int'].mean().sort_values(ascending=True).head()
+~~~
+| team                   |   weight_int |
+|:-----------------------|-------------:|
+| Oklahoma City Thunder  |       209.15 |
+| Golden State Warriors  |       209.18 |
+| Charlotte Hornets      |       210.47 |
+| Los Angeles Clippers   |       211.47 |
+| Portland Trail Blazers |       212    |
+
+
+### Heaviest teams in the NBA: 
+~~~python
+nba_df.groupby('team')['weight_int'].mean().sort_values(ascending=False).head()
+~~~
+| team                |   weight_int |
+|:--------------------|-------------:|
+| Boston Celtics      |       224.88 |
+| Miami Heat          |       223.25 |
+| Cleveland Cavaliers |       220.06 |
+| Houston Rockets     |       219.52 |
+| Orlando Magic       |       218.44 |
+
+
+### Tallest teams in the NBA: 
+~~~python
+nba_df.groupby('team')['height_in'].mean().sort_values(ascending=False).head()
+~~~
+| team                  |   height_in |
+|:----------------------|------------:|
+| Washington Wizards    |       79.59 |
+| Charlotte Hornets     |       79.53 |
+| Oklahoma City Thunder |       79.45 |
+| Orlando Magic         |       79.39 |
+| Boston Celtics        |       79    |
+
+
+### Shortest teams in the NBA: 
+~~~python
+nba_df.groupby('team')['height_in'].mean().sort_values(ascending=True).head()
+~~~
+| team                   |   height_in |
+|:-----------------------|------------:|
+| Portland Trail Blazers |       77.59 |
+| Houston Rockets        |       77.67 |
+| New Orleans Pelicans   |       77.74 |
+| Phoenix Suns           |       77.88 |
+| Brooklyn Nets          |       77.94 |
+
+
+And since we have the data, let's lastly see the ten colleges with the highest representation in the NBA.  We'll probably see the blue bloods (Duke, Kentucky, Kansas, etc.) but let's see if there are any surprises.  
+~~~python
+nba_df.pivot_table(index='college', aggfunc='size').sort_values(ascending=False).head(10)
+~~~
+| college        |     |
+|:---------------|----:|
+| Duke           |  25 |
+| Kentucky       |  25 |
+| UCLA           |  12 |
+| Michigan       |  12 |
+| Arizona        |  11 |
+| USC            |  11 |
+| Kansas         |  10 |
+| Gonzaga        |  10 |
+| Texas          |  10 |
+| North Carolina |  10 |
+

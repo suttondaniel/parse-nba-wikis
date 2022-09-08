@@ -20,7 +20,5 @@ nba_teams_clean = add_and_adjust_cols(nba_teams)
 
 
 
-
-
 #nba_teams_clean.to_csv('nba_df.csv', index=False)
 
