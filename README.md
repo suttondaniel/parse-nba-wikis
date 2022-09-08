@@ -1,17 +1,8 @@
----
-slug: scraping-nba-wikipedia-pages
-title: Scraping NBA Wikipedia Pages
-authors: dan
-tags: [webscraping, python, pandas, BeautifulSoup]
---- 
-
 #### Scraping NBA Wikipedia pages
 
-Who is the youngest team in the NBA at this very moment?  What about the oldest?  How can we go about answering this?!
+Who is the youngest team in the NBA at this very moment?  What about the oldest? 
 
-![alt](./images/scrape_nba_wikis/blazers_roster.png)
-
-Luckily, the "Current Roster" section of an NBA team's Wikipedia page has all the information we need and then some, as we can see above.  My hometown Blazers are rolling several guys out that were born in the 2000s, so surely they must be up there for the youngest?  Right?  (feeling old yet?)
+Luckily, the "Current Roster" section of an NBA team's Wikipedia page has all the information we need and then some.  My hometown Blazers are rolling several guys out that were born in the 2000s, so surely they must be up there for the youngest?  Right?
 
 Here is the URL for the Blazers' current roster: 
 
@@ -178,7 +169,7 @@ nba_df.groupby('team')['height_in'].mean().sort_values(ascending=True).head()
 | Brooklyn Nets          |       77.94 |
 
 
-And since we have the data, let's lastly see the ten colleges with the highest representation in the NBA.  We'll probably see the blue bloods (Duke, Kentucky, Kansas, etc.) but let's see if there are any surprises.  
+And since we have the data, for fun let's just see the ten colleges with the highest representation in the NBA.  We'll probably see the blue bloods (Duke, Kentucky, Kansas, etc.) but let's see if there are any surprises.  
 ~~~python
 nba_df.pivot_table(index='college', aggfunc='size').sort_values(ascending=False).head(10)
 ~~~
