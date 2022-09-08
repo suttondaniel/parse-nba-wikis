@@ -1,8 +1,3 @@
 # ignore ALL files in archive directory
 archive/
-__pycache__/
-
-**/__pycache__/
 **/__pycache__
-
-__pycache__
